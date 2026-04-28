@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .form-group { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<h1>Nuevo Registro</h1>
+
+<p style="color:red;" th:text="${error}"></p>
+
+<form method="post" action="/registros">
+
+    <div class="form-group">
+        <label>Estudiante</label>
+        <select name="estudianteId">
+            <option th:each="e : ${estudiantes}"
+                    th:value="${e.id}"
+                    th:text="${e.nombre}">
+            </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Asignatura</label>
+        <select name="asignaturaId">
+            <option th:each="a : ${asignaturas}"
+                    th:value="${a.id}"
+                    th:text="${a.nombre}">
+            </option>
+        </select>
+    </div>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<br>
+<a href="/registros">Volver</a>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registros</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>Registros</h1>
+
+<a href="/registros/nuevo">Nuevo Registro</a>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Estudiante ID</th>
+        <th>Asignatura ID</th>
+        <th>Acciones</th>
+    </tr>
+
+    <tr th:each="r : ${registros}">
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.estudianteId}"></td>
+        <td th:text="${r.asignaturaId}"></td>
+        <td>
+            <a th:href="@{'/registros/eliminar/' + ${r.id}}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+<br>
+<a href="/">Volver</a>
+
+</body>
+</html>
