@@ -20,11 +20,15 @@ public class SpaghettiApplication {
 	List<Map<String, Object>> asignaturas = new ArrayList<>();
 	int asignaturaId = 1;
 
+	List<Map<String, Object>> registros = new ArrayList<>();
+	int registroId = 1;
+
 	@GetMapping("/")
 	public String home() {
 		String html = "<h1>Sistema Academico</h1>";
 		html += "<a href='/estudiantes'><button>Gestionar Estudiantes</button></a><br><br>";
-		html += "<a href='/asignaturas'><button>Gestionar Asignaturas</button></a>";
+		html += "<a href='/asignaturas'><button>Gestionar Asignaturas</button></a><br><br>";
+		html += "<a href='/registros'><button>Gestionar Registros</button></a>";
 		return html;
 	}
 
@@ -240,5 +244,83 @@ public class SpaghettiApplication {
 		}
 
 		return "<h3>Actualizada</h3><a href='/asignaturas'>Volver</a>";
+	}
+
+	@GetMapping("/registros")
+	public String registros() {
+		String html = "<h1>Registros</h1>";
+
+		html += "<form method='POST' action='/crear-registro'>";
+
+		html += "Estudiante: <select name='estudianteId'>";
+		for (Map<String, Object> e : estudiantes) {
+			html += "<option value='" + e.get("id") + "'>" + e.get("nombre") + "</option>";
+		}
+		html += "</select><br>";
+
+		html += "Asignatura: <select name='asignaturaId'>";
+		for (Map<String, Object> a : asignaturas) {
+			html += "<option value='" + a.get("id") + "'>" + a.get("nombre") + "</option>";
+		}
+		html += "</select><br>";
+
+		html += "Periodo: <input name='periodo'/><br>";
+		html += "Nota: <input name='nota'/><br>";
+
+		html += "<button type='submit'>Registrar</button>";
+		html += "</form><br>";
+
+		html += "<ul>";
+		for (Map<String, Object> r : registros) {
+
+			String nombreEstudiante = "";
+			for (Map<String, Object> e : estudiantes) {
+				if ((int) e.get("id") == (int) r.get("estudianteId")) {
+					nombreEstudiante = (String) e.get("nombre");
+				}
+			}
+
+			String nombreAsignatura = "";
+			for (Map<String, Object> a : asignaturas) {
+				if ((int) a.get("id") == (int) r.get("asignaturaId")) {
+					nombreAsignatura = (String) a.get("nombre");
+				}
+			}
+
+			html += "<li>";
+			html += r.get("id") + " - " + nombreEstudiante + " | " + nombreAsignatura;
+			html += " | Periodo: " + r.get("periodo");
+			html += " | Nota: " + r.get("nota");
+			html += " <a href='/eliminar-registro/" + r.get("id") + "'>Eliminar</a>";
+			html += "</li>";
+		}
+		html += "</ul>";
+
+		html += "<a href='/'>Volver</a>";
+		return html;
+	}
+
+	@PostMapping("/crear-registro")
+	public String crearRegistro(@RequestParam int estudianteId,
+								@RequestParam int asignaturaId,
+								@RequestParam String periodo,
+								@RequestParam double nota) {
+
+		Map<String, Object> registro = new HashMap<>();
+		registro.put("id", registroId++);
+		registro.put("estudianteId", estudianteId);
+		registro.put("asignaturaId", asignaturaId);
+		registro.put("periodo", periodo);
+		registro.put("nota", nota);
+
+		registros.add(registro);
+
+		return "<h3>Registrado</h3><a href='/registros'>Volver</a>";
+	}
+
+	@GetMapping("/eliminar-registro/{id}")
+	public String eliminarRegistro(@PathVariable int id) {
+		registros.removeIf(r -> (int) r.get("id") == id);
+		return "<h3>Eliminado</h3><a href='/registros'>Volver</a>";
 	}
 }
