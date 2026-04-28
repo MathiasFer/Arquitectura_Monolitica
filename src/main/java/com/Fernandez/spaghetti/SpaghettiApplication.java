@@ -17,10 +17,14 @@ public class SpaghettiApplication {
 	List<Map<String, Object>> estudiantes = new ArrayList<>();
 	int estudianteId = 1;
 
+	List<Map<String, Object>> asignaturas = new ArrayList<>();
+	int asignaturaId = 1;
+
 	@GetMapping("/")
 	public String home() {
 		String html = "<h1>Sistema Academico</h1>";
-		html += "<a href='/estudiantes'><button>Gestionar Estudiantes</button></a>";
+		html += "<a href='/estudiantes'><button>Gestionar Estudiantes</button></a><br><br>";
+		html += "<a href='/asignaturas'><button>Gestionar Asignaturas</button></a>";
 		return html;
 	}
 
@@ -77,9 +81,7 @@ public class SpaghettiApplication {
 
 	@GetMapping("/eliminar-estudiante/{id}")
 	public String eliminar(@PathVariable int id) {
-
 		estudiantes.removeIf(e -> (int) e.get("id") == id);
-
 		return "<h3>Eliminado</h3><a href='/estudiantes'>Volver</a>";
 	}
 
@@ -131,5 +133,112 @@ public class SpaghettiApplication {
 		}
 
 		return "<h3>Actualizado</h3><a href='/estudiantes'>Volver</a>";
+	}
+
+	@GetMapping("/asignaturas")
+	public String asignaturas() {
+		String html = "<h1>Asignaturas</h1>";
+
+		html += "<form method='POST' action='/crear-asignatura'>";
+		html += "Nombre: <input name='nombre'/><br>";
+		html += "Codigo: <input name='codigo'/><br>";
+		html += "Creditos: <input name='creditos'/><br>";
+		html += "Docente: <input name='docente'/><br>";
+		html += "<button type='submit'>Crear</button>";
+		html += "</form><br>";
+
+		html += "<ul>";
+		for (Map<String, Object> a : asignaturas) {
+			html += "<li>";
+			html += a.get("id") + " - " + a.get("nombre");
+			html += " | Cod: " + a.get("codigo");
+			html += " | Cred: " + a.get("creditos");
+			html += " | Docente: " + a.get("docente");
+			html += " <a href='/editar-asignatura/" + a.get("id") + "'>Editar</a>";
+			html += " <a href='/eliminar-asignatura/" + a.get("id") + "'>Eliminar</a>";
+			html += "</li>";
+		}
+		html += "</ul>";
+
+		html += "<a href='/'>Volver</a>";
+		return html;
+	}
+
+	@PostMapping("/crear-asignatura")
+	public String crearAsignatura(@RequestParam String nombre,
+								  @RequestParam String codigo,
+								  @RequestParam int creditos,
+								  @RequestParam String docente) {
+
+		if (nombre == null || nombre.length() < 3) {
+			return "<h3>Error en nombre</h3><a href='/asignaturas'>Volver</a>";
+		}
+
+		Map<String, Object> asignatura = new HashMap<>();
+		asignatura.put("id", asignaturaId++);
+		asignatura.put("nombre", nombre);
+		asignatura.put("codigo", codigo);
+		asignatura.put("creditos", creditos);
+		asignatura.put("docente", docente);
+
+		asignaturas.add(asignatura);
+
+		return "<h3>Creada</h3><a href='/asignaturas'>Volver</a>";
+	}
+
+	@GetMapping("/eliminar-asignatura/{id}")
+	public String eliminarAsignatura(@PathVariable int id) {
+		asignaturas.removeIf(a -> (int) a.get("id") == id);
+		return "<h3>Eliminada</h3><a href='/asignaturas'>Volver</a>";
+	}
+
+	@GetMapping("/editar-asignatura/{id}")
+	public String editarAsignaturaForm(@PathVariable int id) {
+
+		Map<String, Object> asignatura = null;
+
+		for (Map<String, Object> a : asignaturas) {
+			if ((int) a.get("id") == id) {
+				asignatura = a;
+			}
+		}
+
+		if (asignatura == null) {
+			return "<h3>No encontrada</h3><a href='/asignaturas'>Volver</a>";
+		}
+
+		String html = "<h1>Editar Asignatura</h1>";
+
+		html += "<form method='POST' action='/actualizar-asignatura'>";
+		html += "<input type='hidden' name='id' value='" + asignatura.get("id") + "'/>";
+		html += "Nombre: <input name='nombre' value='" + asignatura.get("nombre") + "'/><br>";
+		html += "Codigo: <input name='codigo' value='" + asignatura.get("codigo") + "'/><br>";
+		html += "Creditos: <input name='creditos' value='" + asignatura.get("creditos") + "'/><br>";
+		html += "Docente: <input name='docente' value='" + asignatura.get("docente") + "'/><br>";
+		html += "<button type='submit'>Actualizar</button>";
+		html += "</form>";
+
+		html += "<a href='/asignaturas'>Volver</a>";
+
+		return html;
+	}
+
+	@PostMapping("/actualizar-asignatura")
+	public String actualizarAsignatura(@RequestParam int id,
+									   @RequestParam String nombre,
+									   @RequestParam String codigo,
+									   @RequestParam int creditos,
+									   @RequestParam String docente) {
+
+		for (Map<String, Object> a : asignaturas) {
+			if ((int) a.get("id") == id) {
+				a.put("nombre", nombre);
+				a.put("codigo", codigo);
+				a.put("creditos", creditos);
+				a.put("docente", docente);
+			}
+		}
+
+		return "<h3>Actualizada</h3><a href='/asignaturas'>Volver</a>";
 	}
 }
