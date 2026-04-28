@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Estudiantes</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        a {
+            margin-right: 10px;
+        }
+
+        .top-actions {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Estudiantes</h1>
+
+<div class="top-actions">
+    <a href="/estudiantes/nuevo">Nuevo Estudiante</a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th>Email</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="e : ${estudiantes}">
+        <td th:text="${e.id}"></td>
+        <td th:text="${e.nombre}"></td>
+        <td th:text="${e.direccion}"></td>
+        <td th:text="${e.telefono}"></td>
+        <td th:text="${e.email}"></td>
+        <td>
+            <a th:href="@{'/estudiantes/editar/' + ${e.id}}">Editar</a>
+            <a th:href="@{'/estudiantes/eliminar/' + ${e.id}}">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/">Volver</a>
+
+</body>
+</html>
