@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulario</title>
+</head>
+<body>
+
+<h1>Asignatura</h1>
+
+<p style="color:red;" th:text="${error}"></p>
+
+<form method="post" action="/asignaturas">
+
+    <input type="hidden" name="id" th:value="${asignatura.id}" />
+
+    Nombre: <input name="nombre" th:value="${asignatura.nombre}"/><br><br>
+    Codigo: <input name="codigo" th:value="${asignatura.codigo}"/><br><br>
+    Creditos: <input name="creditos" th:value="${asignatura.creditos}"/><br><br>
+    Docente: <input name="docente" th:value="${asignatura.docente}"/><br><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<br>
+<a href="/asignaturas">Volver</a>
+
+</body>
+</html>

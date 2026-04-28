@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Asignaturas</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 10px; }
+        th { background: #eee; }
+    </style>
+</head>
+<body>
+
+<h1>Asignaturas</h1>
+
+<a href="/asignaturas/nuevo">Nueva Asignatura</a>
+
+<table>
+    <tr>
+        <th>ID</th><th>Nombre</th><th>Codigo</th><th>Creditos</th><th>Docente</th><th>Acciones</th>
+    </tr>
+    <tr th:each="a : ${asignaturas}">
+        <td th:text="${a.id}"></td>
+        <td th:text="${a.nombre}"></td>
+        <td th:text="${a.codigo}"></td>
+        <td th:text="${a.creditos}"></td>
+        <td th:text="${a.docente}"></td>
+        <td>
+            <a th:href="@{'/asignaturas/editar/' + ${a.id}}">Editar</a>
+            <a th:href="@{'/asignaturas/eliminar/' + ${a.id}}">Eliminar</a>
+        </td>
+    </tr>
+</table>
+
+<br>
+<a href="/">Volver</a>
+
+</body>
+</html>

@@ -2,12 +2,43 @@
 <html>
 <head>
     <title>Home</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        a button {
+            padding: 15px 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-<h1>Sistema Academico</h1>
 
-<a href="/estudiantes">
-    <button>Gestionar Estudiantes</button>
-</a>
+<h1>Sistema Académico</h1>
+
+<div class="btn-container">
+    <a href="/estudiantes">
+        <button>Estudiantes</button>
+    </a>
+
+    <a href="/asignaturas">
+        <button>Asignaturas</button>
+    </a>
+</div>
+
 </body>
 </html>
